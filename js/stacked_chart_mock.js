@@ -42,9 +42,8 @@ async function init() {
     .call(d3.axisLeft(y));
 
   // color palette = one color per subgroup
-  var color = d3.scaleOrdinal()
+  var color = d3.scaleOrdinal(d3.schemeCategory10)
     .domain(fuel_types)
-    .range(['#e41a1c','#377eb8','#4daf4a']);
 
   //stack the data? --> stack per subgroup
   var stackedData = d3.stack()

@@ -13,6 +13,37 @@ var svg = d3.select("#my_dataviz")
     .attr("transform",
           "translate(" + margin.left + "," + margin.top + ")");
 
+params = {
+    highlighted: ''
+}
+
+
+function highlight(e, legend_val){
+  // console.log(legend_val + '-' + params.highlighted)
+  d3.selectAll(".legend_color").style("opacity",1)
+  if (params.highlighted !== legend_val){
+      d3.selectAll(".stream")
+       .filter(function(e){
+           // console.log(e.key)
+           return e.key !== legend_val;
+         })
+       .style("opacity",0.1);
+      d3.selectAll(".stream")
+       .filter(function(e){
+           return e.key === legend_val;
+         })
+       .style("opacity",1.0);
+      params.highlighted = legend_val;
+  } else {
+      d3.selectAll(".stream")
+       .filter(function(e){
+           return e.key !== legend_val;
+         })
+       .style("opacity",1.0);
+      params.highlighted = "";
+  }
+}
+
 
 async function init() {
   const data = await d3.csv("./data/mockdata.csv");
@@ -57,13 +88,49 @@ async function init() {
     // Enter in the stack data = loop key per key = group per group
     .data(stackedData)
     .enter().append("g")
+      .attr("class", "stream")
       .attr("fill", function(d) { return color(d.key); })
       .selectAll("rect")
       // enter a second time = loop subgroup per subgroup to add all rectangles
       .data(function(d) { return d; })
       .enter().append("rect")
+        .attr("class", "bar_slice")
         .attr("x", function(d) { return x(d.data.model_year); })
         .attr("y", function(d) { return y(d[1]); })
         .attr("height", function(d) { return y(d[0]) - y(d[1]); })
         .attr("width",x.bandwidth());
+
+
+  // ----- LEGEND -----
+
+  var legend = svg.selectAll(".legend")
+    .data(color.domain())
+  .enter().append("g")
+    .attr("class", "legend")
+    .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+
+
+
+  // legend colors
+  legend.append("rect")
+      .attr("class", "legend_color")
+      .attr("x", width - 17)
+      .attr("width", 15)
+      .attr("height", 15)
+      .attr("fill", color)
+      .attr("stroke", color)
+      .attr("stroke-width", 2)
+      .on("click", highlight);
+      // .on("click", function(d) {
+      //   update(d)
+      // })
+    // ;
+
+  // legend text
+  legend.append("text")
+      .attr("x", width - 24)
+      .attr("y", 9)
+      .attr("dy", ".35em")
+      .style("text-anchor", "end")
+      .text(function(d) { return d; });
 }

@@ -47,7 +47,7 @@ function highlight(e, legend_val){
 
 async function init() {
   const data = await d3.csv("./data/mockdata.csv");
-
+  console.log(data)
   // List of fuel_types = header of the csv files = soil condition here
   var fuel_types = data.columns.slice(1);
 

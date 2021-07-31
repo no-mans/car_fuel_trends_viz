@@ -1,3 +1,35 @@
+// Scene Params
+scenes = [
+    {
+        highlight: "Gasoline",
+        annotation: 0,
+    },{
+        highlight: "Hybrid",
+        annotation: 1,
+    },{
+        highlight: "EV",
+        annotation: 2,
+    }
+]
+
+
+// Viz State
+class VizState {
+    constructor(curr_scene, highlighted) {
+        this.curr_scene = curr_scene;
+        this.highlighted = highlighted;
+    }
+}
+
+var viz_state = undefined
+
+
+
+
+
+
+// Viz Setup
+
 // TODO replace with a proper setup
 // set the dimensions and margins of the graph
 var margin = {top: 10, right: 30, bottom: 20, left: 50},
@@ -61,7 +93,7 @@ function get_stream_center(legend_val) {
 
 function show_annotation(annotation_json) {
     var _annotations = [annotation_json]
-    console.log(_annotations)
+    // console.log(_annotations)
     const makeAnnotations = d3.annotation()
       .type(d3.annotationLabel)
       .annotations(_annotations);
@@ -75,7 +107,15 @@ function show_annotation(annotation_json) {
 var annotations;
 var the_chart;
 
+function show_scene(i){
+    show_annotation(annotations[i]);
+}
 
+function next_scene(){
+    console.log(viz_state)
+    viz_state.curr_scene += 1;
+    show_scene(viz_state.curr_scene);
+}
 
 async function init() {
     // const raw_data = await d3.csv("./data/vehicles_small.csv");
@@ -226,12 +266,14 @@ async function init() {
 
     // Annotations
 
-    gasoline_annotation_point = get_stream_center('Gasoline')
+    gasoline_annotation_point = [400,200] // get_stream_center('Gasoline')
+    hybrid_annotation_point = [700,550] //get_stream_center('Hybrid')
+    electric_annotation_point = [750,460] //get_stream_center('EV')
 
     annotations = [
         {
           note: {
-              title: "an1 title",
+              title: "Gasoline",
               label: "This is the text of the first annotation.\n It explains everything you need to know!",
               wrap: 150,
               align: "left"
@@ -244,10 +286,48 @@ async function init() {
           dx: -100,
           dy: -100
 
-        }].map(function(d){ d.color = "#000000"; return d})
+        },
+        {
+          note: {
+              title: "Hybrid",
+              label: "This is the text of the sec annotation.\n It explains everything you need to know!",
+              wrap: 150,
+              align: "left"
+          },
+          connector: {
+            end: "dot"
+          },
+          x: hybrid_annotation_point[0], // 162
+          y: hybrid_annotation_point[1], // 137,
+          dx: -100,
+          dy: -100
+
+        },
+        {
+          note: {
+              title: "Electric (EV)",
+              label: "This is the text of the third annotation.\n It explains everything you need to know!",
+              wrap: 150,
+              align: "left"
+          },
+          connector: {
+            end: "dot"
+          },
+          x: electric_annotation_point[0], // 162
+          y: electric_annotation_point[1], // 137,
+          dx: -100,
+          dy: -100
+
+        }
+        ].map(function(d){ d.color = "#000000"; return d})
 
 
-    show_annotation(annotations[0])
+    viz_state = new VizState(-1, '');
+    next_scene();
+
+    // show_annotation(annotations[0]);
+    // show_annotation(annotations[1]);
+    // show_annotation(annotations[2]);
 
     // const makeAnnotations = d3.annotation()
     //   .type(d3.annotationLabel)
@@ -257,5 +337,6 @@ async function init() {
     //   .attr("class", "annotation-group")
     //   .call(makeAnnotations)
 }
+
 
 

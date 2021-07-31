@@ -20,7 +20,9 @@ class VizState {
 
 viz_state: VizState = undefined
 
-function show_scene(i){}
+function show_scene(i){
+    show_annotation(annotations[i])
+}
 
 function next_scene(){
     viz_state.curr_scene += 1;
@@ -28,6 +30,14 @@ function next_scene(){
 }
 
 function init() {
+    // all the setup stuff goes here
+
+    annotations.onclick(next_scene())
+
+    // and then:
     viz_state = VizState(-1, '');
     next_scene();
+
 }
+
+

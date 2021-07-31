@@ -100,6 +100,7 @@ function show_annotation(annotation_json) {
     var _annotations = [annotation_json]
     const makeAnnotations = d3.annotation()
         .type(d3.annotationLabel)
+        .notePadding(0)
         .on('noteclick', function (annotation) {
             next_scene();
             // annotation.type.a.selectAll("g.annotation-connector, g.annotation-note")
@@ -289,8 +290,9 @@ async function init() {
                   "Click to see some notable trends with Electricity based alternatives.\n",
               wrap: 300,
               align: "right",
-              lineType:"horizontal",
-              orientation:"topBottom"
+              lineType: "horizontal",
+              orientation: "topBottom",
+              bgPadding: {"top":15,"left":10,"right":10,"bottom":10},
           },
           connector: {
             end: "dot"
@@ -298,7 +300,7 @@ async function init() {
           x: gasoline_annotation_point[0], // 162
           y: gasoline_annotation_point[1], // 137,
           dx: -100,
-          dy: -100
+          dy: -100,
 
         },
         {
@@ -311,6 +313,7 @@ async function init() {
               wrap: 350,
               align: "right",
               lineType:"horizontal",
+
           },
           connector: {
             end: "dot"
@@ -318,7 +321,8 @@ async function init() {
           x: hybrid_annotation_point[0], // 162
           y: hybrid_annotation_point[1], // 137,
           dx: -200,
-          dy: -100
+          dy: -100,
+
 
         },
         {
@@ -343,16 +347,20 @@ async function init() {
               title: "Explore alternative fuel trends on your own!",
               label: "Click the legend squares to highlight different fueld types",
               wrap: 150,
-              align: "left"
+              align: "left",
+              lineType:"horizontal",
           },
           connector: false,
           x: 10, // 162
           y: 10, // 137,
-          dx: 0,
-          dy: 0
+          dx: 10,
+          dy: 10
 
         }
-        ].map(function(d){ d.color = "#000000"; return d})
+        ].map(function(d){
+            d.color = "#000000";
+            // d.fill = "rgba(61,105,153,0.42)";
+            return d})
 
 
     viz_state = new VizState(-1, '');

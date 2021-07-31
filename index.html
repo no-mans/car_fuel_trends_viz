@@ -1,12 +1,30 @@
 <!DOCTYPE html>
-<meta charset="utf-8">
 <html>
+<head>
+<meta charset="utf-8">
+
+
 <title>Trends in Alternative Car Fuels</title>
+<style>
+/*.show-bg {*/
+/*  fill: fuchsia;*/
+/*  fill-opacity: 0.15;*/
+/*}*/
+/*.annotation-note-bg {*/
+/*  fill: rgba(193, 74, 74, 50);*/
+/*}*/
+
+rect.annotation-note-bg {
+  fill : "#FCF2D8";
+  fill-opacity: 1.0;
+}
+</style>
+</head>
+<body onload="init()">
 <script src="https://d3js.org/d3.v7.min.js"></script>
 <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-annotation/2.5.1/d3-annotation.min.js"></script>
 
-<body onload="init()">
 <h1>Trends in Alternative Car Fuels</h1>
 <p>
 <div>Noam Mansovsky</div>

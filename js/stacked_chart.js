@@ -121,11 +121,12 @@ var the_chart;
 
 function show_scene(i){
     clear_annotations();
-    show_annotation(annotations[i]);
+    show_annotation(annotations[scenes[i].annotation]);
+    highlight({}, scenes[i].highlight)
 }
 
 function next_scene(){
-    console.log(viz_state)
+    // console.log(viz_state)
     viz_state.curr_scene = (viz_state.curr_scene + 1) % scenes.length;
     show_scene(viz_state.curr_scene);
 }

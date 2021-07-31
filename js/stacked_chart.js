@@ -283,7 +283,7 @@ async function init() {
 
     // Annotations
 
-    gasoline_annotation_point = [400,200] // get_stream_center('Gasoline')
+    gasoline_annotation_point = [450,300] // get_stream_center('Gasoline')
     hybrid_annotation_point = [700,550] //get_stream_center('Hybrid')
     electric_annotation_point = [750,460] //get_stream_center('EV')
 
@@ -291,9 +291,12 @@ async function init() {
         {
           note: {
               title: "Gasoline",
-              label: "This is the text of the first annotation.\n It explains everything you need to know!",
-              wrap: 150,
-              align: "left"
+              label: "Gasoline is the traditional fuel type, and is still the most common in cars, as can be seen in the chart. However, since its peak in the 1990’s, it shows continued reduction in popularity, giving place to various alternative fuel types. \n" +
+                  "Click to see some notable trends with Electricity based alternatives.\n",
+              wrap: 300,
+              align: "right",
+              lineType:"horizontal",
+              orientation:"topBottom"
           },
           connector: {
             end: "dot"
@@ -307,32 +310,37 @@ async function init() {
         {
           note: {
               title: "Hybrid",
-              label: "This is the text of the sec annotation.\n It explains everything you need to know!",
-              wrap: 150,
-              align: "left"
+              label: "Hybrid cars shown here refer to Hybrid Electric Cars, which combine a conventional internal combustion engine system with an electric propulsion system, and can achieve better fuel economy. \n " +
+                  "It can be seen that since the early 2000s, Hybrid cars have continuously gained popularity.\n" +
+                  "This might be considered as a sign for increasing interest in “zero emission”. In that aspect, Hybrid cars can be considered as a transitional technology, that, while only achieves Zero Emission at a fraction of the time in running Hybrid cars, allows a test bed for developing the technologies for the upcoming fully Electric Vehicles, without sacrificing the proven reliability and range of conventional Gasoline cars.\n" +
+                  "Click to see some more about fully Electric Vehicles.\n",
+              wrap: 350,
+              align: "right",
+              lineType:"horizontal",
           },
           connector: {
             end: "dot"
           },
           x: hybrid_annotation_point[0], // 162
           y: hybrid_annotation_point[1], // 137,
-          dx: -100,
+          dx: -200,
           dy: -100
 
         },
         {
           note: {
               title: "Electric (EV)",
-              label: "This is the text of the third annotation.\n It explains everything you need to know!",
-              wrap: 150,
-              align: "left"
+              label: "Electric Vehicles (EVs) fully rely on electric motors.The chart shows the initial take on EVs during late 1990s, which declined and then re-emerged at 2011, and has been increasing in popularity since then.",
+              wrap: 350,
+              align: "right",
+              lineType:"horizontal",
           },
           connector: {
             end: "dot"
           },
           x: electric_annotation_point[0], // 162
           y: electric_annotation_point[1], // 137,
-          dx: -100,
+          dx: -200,
           dy: -100
 
         },

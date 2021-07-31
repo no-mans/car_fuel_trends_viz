@@ -9,6 +9,9 @@ scenes = [
     },{
         highlight: "EV",
         annotation: 2,
+    },{
+        highlight: "",
+        annotation: 3,
     }
 ]
 
@@ -46,15 +49,19 @@ var svg = d3.select("#my_dataviz")
     .attr("transform",
           "translate(" + margin.left + "," + margin.top + ")");
 
-params = {
-    highlighted: ''
+function clear_highlight() {
+    d3.selectAll(".stream")
+        .style("opacity", 1.0);
+    viz_state.highlighted = "";
 }
 
-
 function highlight(e, legend_val){
-  // console.log(legend_val + '-' + params.highlighted)
+  console.log(legend_val + '-' + viz_state.highlighted)
   d3.selectAll(".legend_color").style("opacity",1)
-  if (params.highlighted !== legend_val){
+  if (legend_val === '') {
+      console.log("clearing!")
+      clear_highlight();
+  } else if (viz_state.highlighted !== legend_val){
       d3.selectAll(".stream")
        .filter(function(e){
            // console.log(e.key)
@@ -66,14 +73,9 @@ function highlight(e, legend_val){
            return e.key === legend_val;
          })
        .style("opacity",1.0);
-      params.highlighted = legend_val;
+      viz_state.highlighted = legend_val;
   } else {
-      d3.selectAll(".stream")
-       .filter(function(e){
-           return e.key !== legend_val;
-         })
-       .style("opacity",1.0);
-      params.highlighted = "";
+      clear_highlight();
   }
 }
 
@@ -121,7 +123,8 @@ var the_chart;
 
 function show_scene(i){
     clear_annotations();
-    show_annotation(annotations[scenes[i].annotation]);
+    let annotation_ix = scenes[i].annotation;
+    show_annotation(annotations[annotation_ix]);
     highlight({}, scenes[i].highlight)
 }
 
@@ -331,6 +334,20 @@ async function init() {
           y: electric_annotation_point[1], // 137,
           dx: -100,
           dy: -100
+
+        },
+        {
+          note: {
+              title: "Explore alternative fuel trends on your own!",
+              label: "Click the legend squares to highlight different fueld types",
+              wrap: 150,
+              align: "left"
+          },
+          connector: false,
+          x: 10, // 162
+          y: 10, // 137,
+          dx: 0,
+          dy: 0
 
         }
         ].map(function(d){ d.color = "#000000"; return d})

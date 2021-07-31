@@ -56,15 +56,12 @@ function clear_highlight() {
 }
 
 function highlight(e, legend_val){
-  console.log(legend_val + '-' + viz_state.highlighted)
   d3.selectAll(".legend_color").style("opacity",1)
   if (legend_val === '') {
-      console.log("clearing!")
       clear_highlight();
   } else if (viz_state.highlighted !== legend_val){
       d3.selectAll(".stream")
        .filter(function(e){
-           // console.log(e.key)
            return e.key !== legend_val;
          })
        .style("opacity",0.1);
@@ -101,7 +98,6 @@ function clear_annotations() {
 
 function show_annotation(annotation_json) {
     var _annotations = [annotation_json]
-    // console.log(_annotations)
     const makeAnnotations = d3.annotation()
         .type(d3.annotationLabel)
         .on('noteclick', function (annotation) {
@@ -129,7 +125,6 @@ function show_scene(i){
 }
 
 function next_scene(){
-    // console.log(viz_state)
     viz_state.curr_scene = (viz_state.curr_scene + 1) % scenes.length;
     show_scene(viz_state.curr_scene);
 }
@@ -226,7 +221,6 @@ async function init() {
     .keys(fuel_types)
     (data);
 
-    // console.log(stackedData)
     // Show the bars
     the_chart = svg.append("g")
         .attr("id", "the_chart")

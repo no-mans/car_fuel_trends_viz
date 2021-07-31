@@ -91,16 +91,28 @@ function get_stream_center(legend_val) {
 }
 
 
+function clear_annotations() {
+    // remove existing annotation
+    the_chart.select(".annotation-group")
+        .remove()
+}
+
 function show_annotation(annotation_json) {
     var _annotations = [annotation_json]
     // console.log(_annotations)
     const makeAnnotations = d3.annotation()
-      .type(d3.annotationLabel)
-      .annotations(_annotations);
+        .type(d3.annotationLabel)
+        .on('noteclick', function (annotation) {
+            next_scene();
+            // annotation.type.a.selectAll("g.annotation-connector, g.annotation-note")
+            //   .classed("hidden", false)
+        })
+        .annotations(_annotations);
 
+    // add new annotation
     the_chart.append("g")
-      .attr("class", "annotation-group")
-      .call(makeAnnotations);
+        .attr("class", "annotation-group")
+        .call(makeAnnotations);
 }
 
 // annotation definitions
@@ -108,12 +120,13 @@ var annotations;
 var the_chart;
 
 function show_scene(i){
+    clear_annotations();
     show_annotation(annotations[i]);
 }
 
 function next_scene(){
     console.log(viz_state)
-    viz_state.curr_scene += 1;
+    viz_state.curr_scene = (viz_state.curr_scene + 1) % scenes.length;
     show_scene(viz_state.curr_scene);
 }
 

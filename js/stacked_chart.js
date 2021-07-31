@@ -1,12 +1,13 @@
 // TODO replace with a proper setup
 // set the dimensions and margins of the graph
 var margin = {top: 10, right: 30, bottom: 20, left: 50},
-    width = 460 - margin.left - margin.right,
-    height = 400 - margin.top - margin.bottom;
+    width = 1000 - margin.left - margin.right,
+    height = 600 - margin.top - margin.bottom;
 
 // append the svg object to the body of the page
 var svg = d3.select("#my_dataviz")
   .append("svg")
+    .attr("id", "main_canvas")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
   .append("g")
@@ -44,6 +45,37 @@ function highlight(e, legend_val){
   }
 }
 
+function get_stream_center(legend_val) {
+    var selected_rects = d3.selectAll(".stream")
+        .filter(function (e) {
+            return e.key === legend_val;
+        }).selectAll(".bar_slice")
+        .filter(function (d) {
+            return d.data[legend_val] > 0;
+        });
+    var _box = selected_rects.nodes()[Math.floor(selected_rects.size() / 2)].getBoundingClientRect();
+    _box_center = [_box.x + (_box.width / 2), _box.top + (_box.height / 2)]
+    return _box_center
+}
+
+
+function show_annotation(annotation_json) {
+    var _annotations = [annotation_json]
+    console.log(_annotations)
+    const makeAnnotations = d3.annotation()
+      .type(d3.annotationLabel)
+      .annotations(_annotations);
+
+    the_chart.append("g")
+      .attr("class", "annotation-group")
+      .call(makeAnnotations);
+}
+
+// annotation definitions
+var annotations;
+var the_chart;
+
+
 
 async function init() {
     // const raw_data = await d3.csv("./data/vehicles_small.csv");
@@ -51,7 +83,7 @@ async function init() {
       return {
         id: d.id,
         year: d.year,
-        atvType: (d.atvType == '') ? 'Petrol' : d.atvType
+        atvType: (d.atvType == '') ? 'Gasoline' : d.atvType
         // fuelType: d.fuelType
         // fuelType1: d.fuelType1,
         // fuelType2: d.fuelType2
@@ -59,12 +91,12 @@ async function init() {
     });
 
 
-    fuel_types = ['Diesel', 'Hybrid', 'Bifuel (CNG)', 'CNG', 'FFV', 'EV', 'Bifuel (LPG)', 'Plug-in Hybrid','Petrol']
+    fuel_types = ['Diesel', 'Hybrid', 'Bifuel (CNG)', 'CNG', 'FFV', 'EV', 'Bifuel (LPG)', 'Plug-in Hybrid','Gasoline']
 
     class Row {
       constructor() {
           this.model_year = 0
-          this.Petrol = 0.0
+          this.Gasoline = 0.0
           this.Diesel = 0.0
           this.Hybrid = 0.0
           this['Bifuel (CNG)'] = 0.0
@@ -79,6 +111,11 @@ async function init() {
     // aggregate by year and fuel type
     data = {}
     for (var record of raw_data){
+        // Filter out incomplete years
+        if (record.year > 2020) {
+            continue;
+        }
+
         if (!(record.year in data)){
             let row_obj = new Row();
             const {...row} = row_obj;
@@ -101,29 +138,6 @@ async function init() {
         }
     }
 
-
-
-    // console.log("data_rows:")
-    // console.log(data_rows)
-    // data_year_fuel_type = d3.flatRollup(raw_data, v => v.length, d => d.year, d => d.atvtype)
-    // data_year_fuel_type = d3.rollups(raw_data, v => v.length, d => d.year, d => d.atvtype)
-    // console.log(data_year_fuel_type)
-    // data = d3.rollup(raw_data, v => v.length, d => d.year)
-    // console.log(data)
-    //
-    // for (var row of data_year_fuel_type) {
-    //     yearly_rollup = data[row[0]]
-    //     if (!(row[1] in yearly_rollup)) {
-    //         yearly_rollup[row[1]] = 0
-    //     }
-    //     yearly_rollup[row[1]] += data[row[2]]
-    // }
-    //
-    // console.log ("Block statement execution no." + i);
-
-
-    // List of fuel_types = header of the csv files = soil condition here
-    // var fuel_types = data.columns.slice(1);
 
     // List of years
     var years = d3.map(data, function(d){return(d.model_year)});
@@ -157,22 +171,24 @@ async function init() {
 
     // console.log(stackedData)
     // Show the bars
-    svg.append("g")
-    .selectAll("g")
-    // Enter in the stack data = loop key per key = group per group
-    .data(stackedData)
-    .enter().append("g")
-      .attr("class", "stream")
-      .attr("fill", function(d) { return color(d.key); })
-      .selectAll("rect")
-      // enter a second time = loop subgroup per subgroup to add all rectangles
-      .data(function(d) { return d; })
-      .enter().append("rect")
-        .attr("class", "bar_slice")
-        .attr("x", function(d) { return x(d.data.model_year); })
-        .attr("y", function(d) { return y(d[1]); })
-        .attr("height", function(d) { return y(d[0]) - y(d[1]); })
-        .attr("width",x.bandwidth());
+    the_chart = svg.append("g")
+        .attr("id", "the_chart")
+
+    the_chart.selectAll("g")
+        // Enter in the stack data = loop key per key = group per group
+        .data(stackedData)
+        .enter().append("g")
+          .attr("class", "stream")
+          .attr("fill", function(d) { return color(d.key); })
+          .selectAll("rect")
+          // enter a second time = loop subgroup per subgroup to add all rectangles
+          .data(function(d) { return d; })
+          .enter().append("rect")
+            .attr("class", "bar_slice")
+            .attr("x", function(d) { return x(d.data.model_year); })
+            .attr("y", function(d) { return y(d[1]); })
+            .attr("height", function(d) { return y(d[0]) - y(d[1]); })
+            .attr("width",x.bandwidth());
 
 
     // ----- LEGEND -----
@@ -192,7 +208,7 @@ async function init() {
       .attr("width", 15)
       .attr("height", 15)
       .attr("fill", color)
-      .attr("stroke", color)
+      .attr("stroke", "black")
       .attr("stroke-width", 2)
       .on("click", highlight);
       // .on("click", function(d) {
@@ -207,4 +223,39 @@ async function init() {
       .attr("dy", ".35em")
       .style("text-anchor", "end")
       .text(function(d) { return d; });
+
+    // Annotations
+
+    gasoline_annotation_point = get_stream_center('Gasoline')
+
+    annotations = [
+        {
+          note: {
+              title: "an1 title",
+              label: "This is the text of the first annotation.\n It explains everything you need to know!",
+              wrap: 150,
+              align: "left"
+          },
+          connector: {
+            end: "dot"
+          },
+          x: gasoline_annotation_point[0], // 162
+          y: gasoline_annotation_point[1], // 137,
+          dx: -100,
+          dy: -100
+
+        }].map(function(d){ d.color = "#000000"; return d})
+
+
+    show_annotation(annotations[0])
+
+    // const makeAnnotations = d3.annotation()
+    //   .type(d3.annotationLabel)
+    //   .annotations(annotations);
+    //
+    // the_chart.append("g")
+    //   .attr("class", "annotation-group")
+    //   .call(makeAnnotations)
 }
+
+

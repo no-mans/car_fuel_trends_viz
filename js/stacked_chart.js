@@ -293,7 +293,7 @@ async function init() {
         {
           note: {
               title: "Welcome",
-              label: "The last 4 decades shown interesting innovations in alternative car fuels. In this chart" +
+              label: "The last 4 decades shown interesting innovations in alternative car fuels. In this chart " +
                   "we can see the yearly distribution of car models by fuel types. It allows us to see trends" +
                   "in the popularity of these fuel types, as they take a larger or smaller part of the total " +
                   "number of car models being produced.",

@@ -38,7 +38,7 @@ var viz_state = undefined
 
 // TODO replace with a proper setup
 // set the dimensions and margins of the graph
-var margin = {top: 10, right: 30, bottom: 20, left: 50},
+var margin = {top: 10, right: 30, bottom: 40, left: 50},
     width = 1000 - margin.left - margin.right,
     height = 600 - margin.top - margin.bottom;
 
@@ -52,11 +52,17 @@ var svg = d3.select("#my_dataviz")
     .attr("transform",
           "translate(" + margin.left + "," + margin.top + ")");
 
+
+var color;
+
 function clear_highlight() {
     d3.selectAll(".stream")
-        .style("opacity", 1.0);
+        .style("stroke", function(d) {color(d.key)});
+        // .style("opacity", 1.0);
     viz_state.highlighted = "";
 }
+
+
 
 function highlight(e, legend_val){
   d3.selectAll(".legend_color").style("opacity",1)
@@ -67,12 +73,12 @@ function highlight(e, legend_val){
        .filter(function(e){
            return e.key !== legend_val;
          })
-       .style("opacity",0.3);
+       .style("stroke", function(d) {color(d.key)});
       d3.selectAll(".stream")
        .filter(function(e){
            return e.key === legend_val;
          })
-       .style("opacity",1.0);
+       .style("stroke", "#fff79e");
       viz_state.highlighted = legend_val;
   } else {
       clear_highlight();
@@ -129,7 +135,9 @@ function show_scene(i){
 }
 
 function next_scene(){
-    viz_state.curr_scene = (viz_state.curr_scene + 1) % scenes.length;
+    if (viz_state.curr_scene < 5) {
+        viz_state.curr_scene = (viz_state.curr_scene + 1) % scenes.length;
+    }
     show_scene(viz_state.curr_scene);
 }
 
@@ -209,17 +217,35 @@ async function init() {
     .attr("transform", "translate(0," + height + ")")
     .call(d3.axisBottom(x).tickSizeOuter(0));
 
+    svg.append("text")
+      .attr("transform",
+            "translate(" + (width/2) + " ," +
+                           (height + margin.top + 20) + ")")
+      .style("text-anchor", "middle")
+      .text("Year");
+
     // Add Y axis
+    var formatPercent = d3.format(".0%");
+
     var y = d3.scaleLinear()
     .domain([0, 1])
     .range([ height, 0 ]);
     svg.append("g")
-    .call(d3.axisLeft(y));
+    .call(d3.axisLeft(y).tickFormat(formatPercent));
+
+    // Y Axis Label
+    svg.append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 0 - margin.left)
+      .attr("x",0 - (height / 2))
+      .attr("dy", "1em")
+      .style("text-anchor", "middle")
+      .text("% Of Models");
 
     // color palette = one color per subgroup
     // var color = d3.scaleOrdinal(d3.schemePaired)
-    var color = d3.scaleOrdinal().domain(data)
-       .range(["silver", "blue", "green", "yellow", "pink", "cyan", "darkgreen", "pink", "orange"])
+    color = d3.scaleOrdinal().domain(data)
+       .range(["silver", "blue", "green", "white", "pink", "cyan", "darkgreen", "violet", "orange"])
 
     .domain(fuel_types)
 
@@ -238,6 +264,8 @@ async function init() {
         .enter().append("g")
           .attr("class", "stream")
           .attr("fill", function(d) { return color(d.key); })
+          .attr("stroke", function(d) { return color(d.key); })
+          .attr("stroke-width", 2)
           .selectAll("rect")
           // enter a second time = loop subgroup per subgroup to add all rectangles
           .data(function(d) { return d; })
@@ -285,9 +313,9 @@ async function init() {
     // Annotations
 
     welcome_annotation_point = [550,150]
-    gasoline_annotation_point = [450,300] // get_stream_center('Gasoline')
-    hybrid_annotation_point = [700,550] //get_stream_center('Hybrid')
-    electric_annotation_point = [750,460] //get_stream_center('EV')
+    gasoline_annotation_point = [460,300] // get_stream_center('Gasoline')
+    hybrid_annotation_point = [710,530] //get_stream_center('Hybrid')
+    electric_annotation_point = [800,480] //get_stream_center('EV')
 
     annotations = [
         {

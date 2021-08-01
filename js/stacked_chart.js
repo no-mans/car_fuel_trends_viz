@@ -334,7 +334,8 @@ async function init() {
               label: "The last 4 decades shown interesting innovations in alternative car fuels. In this chart " +
                   "we can see the yearly distribution of car models by fuel types. It allows us to see trends" +
                   "in the popularity of these fuel types, as they take a larger or smaller part of the total " +
-                  "number of car models being produced.",
+                  "number of car models being produced." +
+                  "Click here to continue.",
               wrap: 300,
               align: "right",
               lineType: "horizontal",
@@ -392,7 +393,9 @@ async function init() {
         {
           note: {
               title: "Electric (EV)",
-              label: "Electric Vehicles (EVs) fully rely on electric motors.The chart shows the initial take on EVs during late 1990s, which declined and then re-emerged at 2011, and has been increasing in popularity since then.",
+              label: "Electric Vehicles (EVs) fully rely on electric motors.The chart shows the initial take on EVs during late 1990s, " +
+                  "which declined and then re-emerged at 2011, and has been increasing in popularity since then. \n" +
+                  "Click here to continue.",
               wrap: 350,
               align: "right",
               lineType:"horizontal",

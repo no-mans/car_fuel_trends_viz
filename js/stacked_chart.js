@@ -1,17 +1,20 @@
 // Scene Params
 scenes = [
     {
-        highlight: "Gasoline",
+        highlight: "",
         annotation: 0,
     },{
-        highlight: "Hybrid",
+        highlight: "Gasoline",
         annotation: 1,
     },{
-        highlight: "EV",
+        highlight: "Hybrid",
         annotation: 2,
     },{
-        highlight: "",
+        highlight: "EV",
         annotation: 3,
+    },{
+        highlight: "",
+        annotation: 4,
     }
 ]
 
@@ -64,7 +67,7 @@ function highlight(e, legend_val){
        .filter(function(e){
            return e.key !== legend_val;
          })
-       .style("opacity",0.1);
+       .style("opacity",0.3);
       d3.selectAll(".stream")
        .filter(function(e){
            return e.key === legend_val;
@@ -214,7 +217,10 @@ async function init() {
     .call(d3.axisLeft(y));
 
     // color palette = one color per subgroup
-    var color = d3.scaleOrdinal(d3.schemeCategory10)
+    // var color = d3.scaleOrdinal(d3.schemePaired)
+    var color = d3.scaleOrdinal().domain(data)
+       .range(["silver", "blue", "green", "yellow", "pink", "cyan", "darkgreen", "pink", "orange"])
+
     .domain(fuel_types)
 
     //stack the data? --> stack per subgroup
@@ -278,12 +284,32 @@ async function init() {
 
     // Annotations
 
+    welcome_annotation_point = [550,150]
     gasoline_annotation_point = [450,300] // get_stream_center('Gasoline')
     hybrid_annotation_point = [700,550] //get_stream_center('Hybrid')
     electric_annotation_point = [750,460] //get_stream_center('EV')
 
     annotations = [
         {
+          note: {
+              title: "Welcome",
+              label: "The last 4 decades shown interesting innovations in alternative car fuels. In this chart" +
+                  "we can see the yearly distribution of car models by fuel types. It allows us to see trends" +
+                  "in the popularity of these fuel types, as they take a larger or smaller part of the total " +
+                  "number of car models being produced.",
+              wrap: 300,
+              align: "right",
+              lineType: "horizontal",
+              orientation: "topBottom",
+              bgPadding: {"top":15,"left":10,"right":10,"bottom":10},
+          },
+          connector: false,
+          x: welcome_annotation_point[0], // 162
+          y: welcome_annotation_point[1], // 137,
+          dx: 0,
+          dy: 0,
+
+        },{
           note: {
               title: "Gasoline",
               label: "Gasoline is the traditional fuel type, and is still the most common in cars, as can be seen in the chart. However, since its peak in the 1990’s, it shows continued reduction in popularity, giving place to various alternative fuel types. \n" +

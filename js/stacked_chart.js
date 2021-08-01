@@ -135,7 +135,7 @@ function show_scene(i){
 }
 
 function next_scene(){
-    if (viz_state.curr_scene < 5) {
+    if (viz_state.curr_scene < 4) {
         viz_state.curr_scene = (viz_state.curr_scene + 1) % scenes.length;
     }
     show_scene(viz_state.curr_scene);

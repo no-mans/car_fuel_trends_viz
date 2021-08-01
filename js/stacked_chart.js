@@ -318,7 +318,7 @@ async function init() {
     welcome_annotation_point = [550,150]
     gasoline_annotation_point = [460,300] // get_stream_center('Gasoline')
     hybrid_annotation_point = [710,530] //get_stream_center('Hybrid')
-    electric_annotation_point = [800,480] //get_stream_center('EV')
+    electric_annotation_point = [800,440] //get_stream_center('EV')
 
     annotations = [
         {

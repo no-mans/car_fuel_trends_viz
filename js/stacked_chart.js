@@ -215,7 +215,10 @@ async function init() {
 
     svg.append("g")
     .attr("transform", "translate(0," + height + ")")
-    .call(d3.axisBottom(x).tickSizeOuter(0));
+    .call(d3.axisBottom(x)
+        .tickSizeOuter(0)
+        .tickValues(x.domain().filter(function(d,i){ return !(i%2)}))
+    );
 
     svg.append("text")
       .attr("transform",
@@ -228,7 +231,7 @@ async function init() {
     var formatPercent = d3.format(".0%");
 
     var y = d3.scaleLinear()
-    .domain([0, 1])
+    .domain([0, 0.6])
     .range([ height, 0 ]);
     svg.append("g")
     .call(d3.axisLeft(y).tickFormat(formatPercent));

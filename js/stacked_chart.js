@@ -245,12 +245,19 @@ async function init() {
       .style("text-anchor", "middle")
       .text("% Of Models");
 
+    color_scheme = d3.schemeCategory10;
+    color_scheme[8] = "orange";
+    // color_scheme[1], color_scheme[9]  = color_scheme[9], color_scheme[1] ;
+    [color_scheme[1], color_scheme[9]]  = [color_scheme[9], color_scheme[1]] ;
+    [color_scheme[0], color_scheme[5]]  = [color_scheme[5], color_scheme[0]] ;
     // color palette = one color per subgroup
     // var color = d3.scaleOrdinal(d3.schemePaired)
-    color = d3.scaleOrdinal().domain(data)
-       .range(["silver", "blue", "green", "white", "pink", "cyan", "darkgreen", "violet", "orange"])
+    color = d3.scaleOrdinal(color_scheme)
+
+       // .range(["silver", "blue", "green", "white", "pink", "cyan", "darkgreen", "violet", "orange"])
 
     .domain(fuel_types)
+    // color[1] = "black";
 
     //stack the data? --> stack per subgroup
     var stackedData = d3.stack()

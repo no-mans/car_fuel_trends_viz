@@ -1,6 +1,64 @@
+<!DOCTYPE html>
 <html>
-  <title>Car Fuel Trends</title>
-  <body>
-    <h1>Hello!</h1>
-  </body>
+<head>
+<meta charset="utf-8">
+
+
+<title>Trends in Alternative Car Fuels</title>
+<style>
+
+rect.annotation-note-bg {
+  fill : "#FCF2D8";
+  fill-opacity: 1.0;
+}
+h1 {
+    font-family: 'Hahmlet', serif;
+}
+.sign {
+    font-family: 'Hahmlet', serif;
+}
+.annotation text {
+    font-family: 'Nunito', sans-serif;
+}
+</style>
+</head>
+<body onload="init()">
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-annotation/2.5.1/d3-annotation.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@200&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300&display=swap" rel="stylesheet">
+<h1>Trends in Alternative Car Fuels</h1>
+<div class="sign">
+<p>
+    <div><h2>Noam Mansovsky -- <a href="mailto:noamm2@illinois.edu">noamm2@illinois.edu</a></h2></div>
+    <div><h3>CS 416: Data Visualization (formerly CS 498) -- Prof. John C. Hart</h3></div>
+</p>
+</div>
+<div id="my_dataviz">
+</div>
+
+<!--<script src="js/stacked_chart_mock.js">-->
+<script src="js/stacked_chart.js">
+
+</script>
+
+<div>
+<h3>Thanks and Credits</h3>
+<h4>Data:</h4>
+    Car Data downloaded from <a>fueleconomy.gov</a>
+    | <a href="https://www.fueleconomy.gov/feg/download.shtml">download</a>
+    | <a href="https://www.fueleconomy.gov/feg/ws/index.shtml">description</a>
+</div>
+<div>
+<h4>Inspirations, References, Snippets and Tips</h4>
+    <li>Relative stacked bar plot: <a href="https://www.d3-graph-gallery.com/graph/barplot_stacked_basicWide.html">d3-graph-gallery</a></li>
+    <li>Clickable legend: <a href="http://bl.ocks.org/Ctuauden/52d057254665400f561ef73cb6e5841a">bl.ocks.org</a></li>
+    <li>Color scheme: <a href="https://github.com/d3/d3-scale-chromatic">d3-scale-chromatic</a></li>
+    <li>Fonts: <a href="https://fonts.google.com/">Google Fonts</a></li>
+</div>
+
+</body>
 </html>
